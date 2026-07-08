@@ -1,0 +1,130 @@
+/* ============================================
+   نظام إدارة عيادة الأسنان — التصميم البصري
+   لوحة الألوان: تيل سريري + كورال دافئ
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap');
+
+:root{
+  --bg: #F3F7F6;
+  --surface: #FFFFFF;
+  --ink: #12241F;
+  --muted: #5B6F6A;
+  --line: #DDE7E3;
+  --teal-900: #0E5951;
+  --teal-700: #157A6E;
+  --teal-100: #E3F2EF;
+  --coral: #FF6B5B;
+  --coral-dark: #E4523F;
+  --mint: #2FBF9D;
+  --danger: #E4523F;
+  --radius: 14px;
+  --shadow: 0 8px 24px rgba(14, 89, 81, 0.08);
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  margin:0; padding:0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+h1,h2,h3,.brand{
+  font-family: 'Cairo', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+a{ color: inherit; }
+
+.tooth-mark{
+  width: 34px; height: 34px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background: var(--teal-900);
+  border-radius: 10px;
+  color: #fff;
+  flex-shrink:0;
+}
+.tooth-mark svg{ width:19px; height:19px; }
+
+.chart-grid{
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity:.5;
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 0%, transparent 70%);
+          mask-image: radial-gradient(circle at 30% 40%, #000 0%, transparent 70%);
+}
+
+.btn{
+  font-family:'Tajawal',sans-serif;
+  font-weight:700;
+  border:none; border-radius: 10px;
+  padding: 12px 20px;
+  cursor:pointer;
+  font-size: 15px;
+  transition: transform .12s ease, box-shadow .12s ease, background .15s ease;
+}
+.btn:active{ transform: scale(.97); }
+.btn-primary{ background: var(--coral); color:#fff; }
+.btn-primary:hover{ background: var(--coral-dark); }
+.btn-ghost{ background: transparent; color: var(--teal-900); border:1.5px solid var(--line); }
+.btn-ghost:hover{ background: var(--teal-100); }
+.btn-danger{ background:#fff; color: var(--danger); border:1.5px solid #F3D4CE; }
+.btn-danger:hover{ background:#FDEDEA; }
+.btn-sm{ padding: 8px 14px; font-size: 13px; border-radius: 8px; }
+
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+.field label{ font-size:13px; font-weight:700; color: var(--muted); }
+.field input, .field select, .field textarea{
+  font-family:'Tajawal',sans-serif;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding: 11px 13px;
+  font-size:15px;
+  background:#fff;
+  color: var(--ink);
+  outline:none;
+  transition: border-color .15s ease;
+}
+.field input:focus, .field select:focus, .field textarea:focus{
+  border-color: var(--teal-700);
+}
+
+.card{
+  background: var(--surface);
+  border-radius: var(--radius);
+  border:1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.badge{
+  display:inline-block;
+  font-size:12px; font-weight:700;
+  padding:3px 10px; border-radius:999px;
+}
+.badge-admin{ background:#FDECEA; color:var(--coral-dark); }
+.badge-employee{ background: var(--teal-100); color: var(--teal-900); }
+
+.toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  background: var(--ink); color:#fff;
+  padding:12px 22px; border-radius:10px;
+  font-size:14px; font-weight:600;
+  box-shadow: var(--shadow);
+  z-index:999; opacity:0; pointer-events:none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
+
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background: var(--line); border-radius:8px; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; animation:none !important; }
+  }
