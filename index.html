@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — نظام إدارة العيادة</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .wrap{
+    width:100%; max-width: 900px;
+    display:grid; grid-template-columns: 1fr 1fr;
+    border-radius: 20px; overflow:hidden;
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 720px){ .wrap{ grid-template-columns: 1fr; } .brand-panel{ display:none; } }
+
+  .brand-panel{
+    position:relative;
+    background: linear-gradient(165deg, var(--teal-900), var(--teal-700));
+    color:#fff;
+    padding: 40px 34px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    overflow:hidden;
+  }
+  .brand-panel .chart-grid{ opacity:.18; }
+  .brand-panel .chart-grid{ background-image:
+      linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px); }
+  .brand-top{ display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
+  .brand-top .tooth-mark{ background: rgba(255,255,255,.15); }
+  .brand-quote{ position:relative; z-index:1; }
+  .brand-quote h2{ font-size:22px; line-height:1.5; margin:0 0 8px; }
+  .brand-quote p{ opacity:.8; font-size:14px; margin:0; }
+
+  .form-panel{ background:#fff; padding: 44px 36
