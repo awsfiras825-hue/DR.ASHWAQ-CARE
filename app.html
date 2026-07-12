@@ -16,4 +16,171 @@
     padding: 22px 16px;
   }
   .sidebar .brand-top{ display:flex; align-items:center; gap:10px; padding: 0 6px 24px; }
-  .sidebar .brand-top .tooth-mark{ background: rgba(255,255,255
+  .sidebar .brand-top .tooth-mark{ background: rgba(255,255,255,.15); }
+  .nav-item{
+    display:flex; align-items:center; gap:10px;
+    padding: 11px 12px; border-radius:10px;
+    color: rgba(255,255,255,.75); text-decoration:none;
+    font-weight:700; font-size:14px; cursor:pointer;
+    margin-bottom:4px;
+  }
+  .nav-item svg{ width:17px; height:17px; flex-shrink:0; }
+  .nav-item:hover{ background: rgba(255,255,255,.08); color:#fff; }
+  .nav-item.active{ background: rgba(255,255,255,.14); color:#fff; }
+  .sidebar-foot{ margin-top:auto; padding-top: 16px; border-top:1px solid rgba(255,255,255,.12); }
+  .who{ font-size:12px; color: rgba(255,255,255,.6); padding: 0 6px 10px; word-break: break-all; }
+
+  .main{ flex:1; min-width:0; }
+  .topbar{
+    background:#fff; border-bottom:1px solid var(--line);
+    padding: 16px 28px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .topbar h1{ font-size:19px; margin:0; }
+  .content{ padding: 26px 28px; }
+
+  .toolbar{ display:flex; gap:12px; align-items:center; margin-bottom:18px; flex-wrap:wrap; }
+  .search-box{ position:relative; flex:1; min-width:220px; max-width:340px; }
+  .search-box input{ width:100%; padding: 10px 14px; border-radius:10px; border:1.5px solid var(--line); font-family:'Tajawal',sans-serif; font-size:14px; }
+
+  table{ width:100%; border-collapse:collapse; }
+  thead th{ text-align:right; font-size:12px; color:var(--muted); font-weight:700; padding: 10px 16px; border-bottom:1px solid var(--line); }
+  tbody td{ padding: 14px 16px; font-size:14px; border-bottom:1px solid var(--line); }
+  tbody tr:hover{ background: var(--teal-100); }
+  .row-actions{ display:flex; gap:8px; justify-content:flex-end; }
+  .empty-state{ text-align:center; padding: 60px 20px; color:var(--muted); }
+
+  .modal-bg{ position:fixed; inset:0; background:rgba(18,36,31,.45); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; }
+  .modal-bg.show{ display:flex; }
+  .modal{ background:#fff; border-radius:16px; padding:28px; width:100%; max-width:480px; max-height:90vh; overflow-y:auto; }
+  .modal h2{ font-size:18px; margin:0 0 18px; }
+  .modal-foot{ display:flex; gap:10px; justify-content:flex-start; margin-top: 6px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:0 12px; }
+
+  @media (max-width: 780px){
+    .sidebar{ position:fixed; z-index:50; height:100vh; transform:translateX(105%); transition:transform .2s ease; }
+    .sidebar.open{ transform:translateX(0); }
+    .content{ padding:18px; }
+    thead{ display:none; }
+    table, tbody, tr, td{ display:block; width:100%; }
+    tbody tr{ border:1px solid var(--line); border-radius:12px; margin-bottom:12px; padding:10px 14px; }
+    tbody td{ border:none; padding:6px 2px; }
+    tbody td:before{ content: attr(data-label); font-weight:700; color:var(--muted); display:inline-block; width:110px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand-top">
+      <div class="tooth-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-2.5 0-3.5 1.5-5 1.5S4 3 3 3c0 5 1 6 1.5 11 .3 3 1 6 2.5 6 1.8 0 1.5-4 2-6 .3-1.2.7-2 3-2s2.7.8 3 2c.5 2 .2 6 2 6 1.5 0 2.2-3 2.5-6C20 9 21 8 21 3c-1 0-2.5 1.5-4 1.5S14.5 3 12 3Z"/></svg>
+      </div>
+      <span class="brand">عيادتي</span>
+    </div>
+    <nav>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        المرضى
+      </div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="who" id="whoBox">...</div>
+      <div class="nav-item" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        تسجيل الخروج
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1>سجل المرضى</h1>
+    </div>
+
+    <div class="content">
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="ابحث بالاسم أو رقم الهاتف...">
+        </div>
+        <button class="btn btn-primary" id="addPatientBtn">+ إضافة مريض</button>
+      </div>
+
+      <div class="card" style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>الاسم</th>
+              <th>الهاتف</th>
+              <th>العمر</th>
+              <th>آخر زيارة</th>
+              <th>الموعد القادم</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="patientsBody"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" style="display:none;">
+          لا يوجد مرضى بعد — اضغط "إضافة مريض" لبدء السجل.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="patientModal">
+  <div class="modal">
+    <h2 id="modalTitle">إضافة مريض جديد</h2>
+    <form id="patientForm">
+      <input type="hidden" id="patientId">
+      <div class="field">
+        <label>الاسم الكامل *</label>
+        <input type="text" id="p_full_name" required>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>الهاتف</label>
+          <input type="text" id="p_phone">
+        </div>
+        <div class="field">
+          <label>العمر</label>
+          <input type="number" id="p_age" min="0">
+        </div>
+      </div>
+      <div class="field">
+        <label>الجنس</label>
+        <select id="p_gender">
+          <option value="">— اختر —</option>
+          <option value="ذكر">ذكر</option>
+          <option value="أنثى">أنثى</option>
+        </select>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>آخر زيارة</label>
+          <input type="date" id="p_last_visit">
+        </div>
+        <div class="field">
+          <label>الموعد القادم</label>
+          <input type="date" id="p_next_appointment">
+        </div>
+      </div>
+      <div class="field">
+        <label>ملاحظات طبية</label>
+        <textarea id="p_notes" rows="3"></textarea>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">حفظ</button>
+        <button type="button" class="btn btn-ghost" id="cancelModalBtn">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+                                                                                                                                           </html>
