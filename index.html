@@ -33,4 +33,128 @@
   .brand-quote h2{ font-size:22px; line-height:1.5; margin:0 0 8px; }
   .brand-quote p{ opacity:.8; font-size:14px; margin:0; }
 
-  .form-panel{ background:#fff; padding: 44px 36
+  .form-panel{ background:#fff; padding: 44px 36px; display:flex; flex-direction:column; justify-content:center; }
+  .form-panel h1{ font-size:23px; margin:0 0 4px; color:var(--ink); }
+  .form-panel .sub{ color:var(--muted); font-size:14px; margin:0 0 26px; }
+  .err{ background:#FDECEA; color:var(--coral-dark); border-radius:10px; padding:10px 14px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
+  .switch{ text-align:center; font-size:13px; color:var(--muted); margin-top:14px; }
+  .switch button{ background:none; border:none; color:var(--teal-700); font-weight:700; cursor:pointer; font-family:inherit; font-size:13px; }
+  #signupFields{ display:none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand-panel">
+    <div class="chart-grid"></div>
+    <div class="brand-top">
+      <div class="tooth-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c-2.5 0-3.5 1.5-5 1.5S4 3 3 3c0 5 1 6 1.5 11 .3 3 1 6 2.5 6 1.8 0 1.5-4 2-6 .3-1.2.7-2 3-2s2.7.8 3 2c.5 2 .2 6 2 6 1.5 0 2.2-3 2.5-6C20 9 21 8 21 3c-1 0-2.5 1.5-4 1.5S14.5 3 12 3Z"/></svg>
+      </div>
+      <span class="brand">عيادتي</span>
+    </div>
+    <div class="brand-quote">
+      <h2>ملف كل مريض، بمكان واحد وآمن.</h2>
+      <p>نظام خاص بعيادتك فقط — الدخول محصور بالأدمن والموظفين الذين تحددهم أنت.</p>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <h1 id="formTitle">تسجيل الدخول</h1>
+    <p class="sub" id="formSub">أدخل بياناتك للوصول إلى لوحة إدارة المرضى</p>
+
+    <div class="err" id="errBox"></div>
+
+    <form id="authForm">
+      <div class="field" id="nameField" style="display:none">
+        <label>الاسم الكامل</label>
+        <input type="text" id="fullName" placeholder="مثال: د. أحمد كريم">
+      </div>
+      <div class="field">
+        <label>البريد الإلكتروني</label>
+        <input type="email" id="email" required placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label>كلمة المرور</label>
+        <input type="password" id="password" required placeholder="••••••••" minlength="6">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%" id="submitBtn">دخول</button>
+    </form>
+
+    <div class="switch">
+      <span id="switchText">ماعندك حساب؟</span>
+      <button id="switchBtn" type="button">إنشاء حساب جديد</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let mode = 'login';
+
+const form = document.getElementById('authForm');
+const errBox = document.getElementById('errBox');
+const switchBtn = document.getElementById('switchBtn');
+
+switchBtn.addEventListener('click', () => {
+  mode = mode === 'login' ? 'signup' : 'login';
+  document.getElementById('formTitle').textContent = mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب جديد';
+  document.getElementById('formSub').textContent = mode === 'login'
+    ? 'أدخل بياناتك للوصول إلى لوحة إدارة المرضى'
+    : 'يُنشأ حسابك بصلاحية "موظف" افتراضياً';
+  document.getElementById('nameField').style.display = mode === 'signup' ? 'flex' : 'none';
+  document.getElementById('submitBtn').textContent = mode === 'login' ? 'دخول' : 'إنشاء الحساب';
+  document.getElementById('switchText').textContent = mode === 'login' ? 'ماعندك حساب؟' : 'عندك حساب؟';
+  switchBtn.textContent = mode === 'login' ? 'إنشاء حساب جديد' : 'تسجيل الدخول';
+  errBox.style.display = 'none';
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errBox.style.display = 'none';
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '...جاري المعالجة';
+
+  try{
+    if (mode === 'login'){
+      const { error } = await supa.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      window.location.href = 'app.html';
+    } else {
+      const fullName = document.getElementById('fullName').value.trim();
+      if (!fullName){ throw new Error('الرجاء إدخال الاسم الكامل'); }
+      const { error } = await supa.auth.signUp({
+        email, password,
+        options: { data: { full_name: fullName } }
+      });
+      if (error) throw error;
+      window.location.href = 'app.html';
+    }
+  } catch (err){
+    errBox.textContent = translateError(err.message);
+    errBox.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = mode === 'login' ? 'دخول' : 'إنشاء الحساب';
+  }
+});
+
+function translateError(msg){
+  if (/Invalid login credentials/i.test(msg)) return 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+  if (/User already registered/i.test(msg)) return 'هذا البريد مسجّل مسبقاً، جرّب تسجيل الدخول';
+  if (/Password should be/i.test(msg)) return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+  return msg;
+}
+
+(async () => {
+  const { data } = await supa.auth.getSession();
+  if (data.session) window.location.href = 'app.html';
+})();
+</script>
+</body>
+  </html>
